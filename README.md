@@ -1,322 +1,614 @@
-# Epitrello - A Trello-like Project Management Tool
+<div align="center">
 
-Epitrello is a simple, web-based project management application inspired by Trello. It allows you to create boards, organize tasks in lists, and manage cards with drag-and-drop functionality.
+# 📋 EpiTrello
 
-## Features
+### Gestionnaire de projets moderne inspiré de Trello
 
-### Core Features (Delivered 5/12)
-- **Board Management**: Create and manage multiple project boards
-- **List Organization**: Create lists to organize your workflow
-- **Card Management**: Add, edit, and organize task cards
-- **Delete Operations**: Delete cards and lists with confirmation dialogs
-- **Drag & Drop**: Move cards between lists with intuitive drag-and-drop
-- **Due Dates**: Set due dates on cards with visual indicators for overdue items
-- **Notifications**: Real-time notifications for due dates and overdue cards
-- **File Attachments**: Upload and attach files to cards
-- **User Authentication**: Register and login with secure authentication
-- **Real-time Collaboration**: WebSocket-powered live updates across users
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat&logo=node.js)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=flat&logo=postgresql)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker)](https://www.docker.com/)
 
-### Advanced Features (Delivered 18/12)
-- **Database Integration**: PostgreSQL database with full schema and migrations
-- **Advanced Search & Filtering**: Search cards by text, due date, comments, and attachments
-- **Card Comments**: Add, view, and delete comments on cards
-- **Activity History**: Track all card and board activities with timestamps
-- **Board Templates**: Create templates from existing boards and instantiate new boards
-- **Quick Filters**: View overdue and due-soon cards instantly
+[Démo](#démarrage-rapide) • [Documentation](#documentation-api) • [Fonctionnalités](#fonctionnalités)
 
-### Infrastructure
-- **Data Persistence**: PostgreSQL database with JSON file fallback
-- **Docker Support**: Multi-container setup with PostgreSQL, backend, and frontend
+</div>
 
-## Tech Stack
+---
+
+## 🎯 À propos
+
+**EpiTrello** est une application web de gestion de projets moderne et collaborative, offrant une interface intuitive de type Kanban. Construite avec React et Node.js, elle permet aux équipes de s'organiser efficacement avec un système de tableaux, listes et cartes personnalisables.
+
+### ✨ Points clés
+
+- 🚀 **Interface réactive** avec drag & drop fluide
+- 🔄 **Collaboration temps réel** via WebSocket
+- 💾 **Base PostgreSQL** robuste et performante
+- 🐳 **Déploiement Docker** simplifié
+- 🔍 **Recherche avancée** multi-critères
+- 📎 **Pièces jointes** et commentaires
+- 🎨 **Templates** de tableaux réutilisables
+- 📅 **Gestion des échéances** avec notifications
+
+---
+
+## 🚀 Fonctionnalités
+
+### 📊 Gestion de projets
+
+| Fonctionnalité | Description |
+|---|---|
+| **Tableaux** | Créez et organisez plusieurs projets simultanément |
+| **Listes** | Structurez votre workflow (À faire, En cours, Terminé) |
+| **Cartes** | Gérez vos tâches avec descriptions détaillées |
+| **Drag & Drop** | Réorganisez facilement cartes et listes |
+| **Dates limites** | Suivez les échéances avec indicateurs visuels |
+| **Fichiers** | Attachez des documents à vos cartes (jusqu'à 50MB) |
+
+### 💬 Collaboration
+
+- **Commentaires** sur les cartes pour échanger avec l'équipe
+- **Historique d'activité** complet avec timestamps
+- **Mises à jour temps réel** synchronisées entre utilisateurs
+- **Authentification** sécurisée avec gestion de sessions
+
+### 🔍 Recherche & Filtres
+
+- Recherche **textuelle** dans titres, descriptions et commentaires
+- Filtrage par **dates d'échéance**
+- Filtres rapides : **En retard** / **À venir**
+- Recherche par **pièces jointes** et **commentaires**
+
+### 🎨 Templates
+
+- Créez des **modèles** à partir de tableaux existants
+- Instanciez de **nouveaux projets** en un clic
+- Bibliothèque de templates personnalisables
+
+---
+
+## 🛠️ Stack technique
 
 ### Frontend
-- **React 18** - Modern React with hooks
-- **React Beautiful DnD** - Drag and drop functionality
-- **Socket.IO Client** - Real-time updates
-- **Axios** - HTTP client for API calls
-- **CSS3** - Custom styling with Trello-inspired design
+```
+React 18              Interface utilisateur moderne avec hooks
+React Beautiful DnD   Drag & drop intuitif
+Socket.IO Client      Synchronisation temps réel
+Axios                 Client HTTP pour les API
+CSS3                  Design personnalisé inspiré Trello
+```
 
 ### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **Socket.IO** - Real-time WebSocket communication
-- **PostgreSQL** - Relational database for data persistence
-- **pg (node-postgres)** - PostgreSQL client for Node.js
-- **CORS** - Cross-origin resource sharing support
-- **Crypto** - Password hashing and token generation
+```
+Node.js               Environnement d'exécution JavaScript
+Express.js            Framework web minimaliste et flexible
+Socket.IO             Communication WebSocket bidirectionnelle
+PostgreSQL            Base de données relationnelle robuste
+node-postgres (pg)    Client PostgreSQL natif
+Crypto                Hachage sécurisé des mots de passe
+```
 
 ### Infrastructure
-- **Docker** - Containerization
-- **Docker Compose** - Multi-container orchestration (PostgreSQL, Backend, Frontend)
-- **PostgreSQL 15** - Database container with Alpine Linux
+```
+Docker                Conteneurisation des services
+Docker Compose        Orchestration multi-conteneurs
+PostgreSQL 15         Image Alpine Linux optimisée
+Volumes               Persistance des données
+```
 
-## Quick Start with Docker
+---
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd epitrello
-   ```
+## 🚀 Démarrage rapide
 
-2. **Launch with Docker Compose**
-   ```bash
-   sudo docker-compose up --build
-   ```
-   Note: You may need `sudo` for Docker permissions.
+### Prérequis
 
-3. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:3001/api
+- [Docker](https://docs.docker.com/get-docker/) et Docker Compose
+- Ou [Node.js 18+](https://nodejs.org/) et npm (pour développement local)
 
-That's it! The application will be running with both frontend and backend containers.
+### Option 1 : Docker (Recommandé)
 
-## Alternative: Local Development (No Docker)
+La façon la plus simple de lancer l'application complète :
 
-If you prefer to run without Docker or encounter permission issues:
-
-1. **Start the Backend**
-   ```bash
-   cd backend
-   npm install
-   npm start
-   ```
-   Backend will run on http://localhost:3001
-
-2. **Start the Frontend (in a new terminal)**
-   ```bash
-   cd frontend
-   npm install
-   npm start
-   ```
-   Frontend will run on http://localhost:3000
-
-This approach is great for development and doesn't require Docker setup.
-
-## Development Setup
-
-If you prefer to run the services individually for development:
-
-### Prerequisites
-- Node.js 18+ 
-- npm
-
-### Backend Setup
 ```bash
+# Cloner le repository
+git clone <votre-repo-url>
+cd EpiTrello
+
+# Lancer tous les services
+sudo docker-compose up --build
+```
+
+**🎉 C'est tout !** L'application est accessible :
+- 🌐 **Frontend** : [http://localhost:3000](http://localhost:3000)
+- 🔌 **API Backend** : [http://localhost:3001/api](http://localhost:3001/api)
+- 🗄️ **PostgreSQL** : `localhost:5432` (utilisateur: `postgres`, mot de passe: `postgres`)
+
+### Option 2 : Développement local
+
+Pour développer sans Docker :
+
+```bash
+# Terminal 1 - Backend
 cd backend
 npm install
-npm run dev  # Runs with nodemon for auto-restart
-```
+npm start          # ou npm run dev avec nodemon
 
-### Frontend Setup
-```bash
+# Terminal 2 - Frontend
 cd frontend
 npm install
-npm start   # Runs React development server
+npm start
 ```
 
-## Project Structure
+---
+
+## 📁 Structure du projet
 
 ```
-epitrello/
-├── frontend/                # React frontend application
+EpiTrello/
+│
+├── 🐳 docker-compose.yml          # Orchestration des conteneurs
+├── 📖 README.md                    # Documentation
+│
+├── 🎨 frontend/                    # Application React
 │   ├── src/
-│   │   ├── components/      # React components
-│   │   │   ├── Board.js     # Main board component
-│   │   │   ├── List.js      # List component with delete functionality
-│   │   │   ├── Card.js      # Card component with due dates & attachments
-│   │   │   ├── Modal.js     # Modal component for forms with file upload
-│   │   │   ├── CardDetailModal.js  # Enhanced card view with comments (NEW)
-│   │   │   ├── CardComments.js     # Comments and activity UI (NEW)
-│   │   │   ├── SearchBar.js        # Advanced search interface (NEW)
-│   │   │   ├── Templates.js        # Template management UI (NEW)
-│   │   │   ├── Login.js     # Authentication component
-│   │   │   └── Notifications.js  # Due date notification system
-│   │   ├── services/        # API services
-│   │   │   └── api.js       # API client (boards, lists, cards, uploads, comments, activity, templates, search)
-│   │   ├── App.js           # Main app with WebSocket integration
-│   │   ├── index.js         # React entry point
-│   │   └── index.css        # Global styles
+│   │   ├── components/
+│   │   │   ├── Board.js            # Tableau principal avec listes
+│   │   │   ├── List.js             # Composant liste (suppression)
+│   │   │   ├── Card.js             # Carte avec échéances & fichiers
+│   │   │   ├── CardDetailModal.js  # Vue détaillée des cartes
+│   │   │   ├── CardComments.js     # Système de commentaires
+│   │   │   ├── SearchBar.js        # Recherche avancée
+│   │   │   ├── Templates.js        # Gestion des templates
+│   │   │   ├── Login.js            # Authentification
+│   │   │   ├── Notifications.js    # Notifications d'échéances
+│   │   │   ├── Modal.js            # Modales réutilisables
+│   │   │   ├── ThemeToggle.js      # Thème clair/sombre
+│   │   │   └── CreateBoardModal.js # Création de tableaux
+│   │   ├── services/
+│   │   │   └── api.js              # Client API centralisé
+│   │   ├── context/
+│   │   │   └── ThemeContext.js     # Contexte de thème
+│   │   ├── App.js                  # Composant racine + WebSocket
+│   │   ├── index.js                # Point d'entrée React
+│   │   └── index.css               # Styles globaux
 │   ├── public/
-│   ├── Dockerfile
+│   ├── build/                      # Build de production
+│   ├── Dockerfile                  # Image Docker frontend
 │   └── package.json
-├── backend/                 # Node.js/Express backend
-│   ├── routes/              # API route handlers
-│   │   ├── boards.js        # Board CRUD operations
-│   │   ├── lists.js         # List CRUD operations
-│   │   ├── cards.js         # Card CRUD with due dates & attachments
-│   │   ├── auth.js          # User authentication endpoints
-│   │   ├── uploads.js       # File upload/download handlers
-│   │   ├── comments.js      # Card comments endpoints (NEW)
-│   │   ├── activity.js      # Activity logging endpoints (NEW)
-│   │   ├── templates.js     # Board templates endpoints (NEW)
-│   │   └── search.js        # Advanced search endpoints (NEW)
-│   ├── data/                # JSON data storage (legacy)
-│   │   ├── boards.json      # Boards data
-│   │   ├── lists.json       # Lists data
-│   │   ├── cards.json       # Cards data
-│   │   └── users.json       # User accounts
-│   ├── uploads/             # File attachment storage
-│   ├── db.js                # PostgreSQL database configuration (NEW)
-│   ├── server.js            # Express server with Socket.IO & DB
-│   ├── Dockerfile
+│
+├── ⚙️ backend/                      # API Node.js/Express
+│   ├── routes/
+│   │   ├── auth.js                 # Endpoints authentification
+│   │   ├── boards.js               # CRUD tableaux
+│   │   ├── lists.js                # CRUD listes
+│   │   ├── cards.js                # CRUD cartes
+│   │   ├── comments.js             # Gestion commentaires
+│   │   ├── activity.js             # Logs d'activité
+│   │   ├── templates.js            # Templates de tableaux
+│   │   ├── search.js               # Recherche avancée
+│   │   └── uploads.js              # Upload/download fichiers
+│   ├── data/                       # Données JSON (legacy)
+│   │   ├── boards.json
+│   │   ├── lists.json
+│   │   ├── cards.json
+│   │   └── users.json
+│   ├── uploads/                    # Stockage des fichiers
+│   ├── db.js                       # Configuration PostgreSQL
+│   ├── server.js                   # Serveur Express + Socket.IO
+│   ├── seedTemplates.js            # Initialisation des templates
+│   ├── Dockerfile                  # Image Docker backend
 │   └── package.json
-├── docker-compose.yml       # Docker orchestration
-└── README.md
+│
+└── 🗄️ PostgreSQL (Docker)          # Base de données
+    └── Volume: postgres-data       # Persistance des données
 ```
 
-## API Endpoints
+---
 
-### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login with email and password
-- `GET /api/auth/me` - Get current authenticated user
+## 📚 Documentation API
 
-### Boards
-- `GET /api/boards` - Get all boards
-- `GET /api/boards/:id` - Get a specific board
-- `POST /api/boards` - Create a new board
-- `PUT /api/boards/:id` - Update a board
-- `DELETE /api/boards/:id` - Delete a board
+### 🔐 Authentification
 
-### Lists
-- `GET /api/lists/board/:boardId` - Get all lists for a board
-- `GET /api/lists/:id` - Get a specific list
-- `POST /api/lists` - Create a new list
-- `PUT /api/lists/:id` - Update a list
-- `DELETE /api/lists/:id` - Delete a list
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| `POST` | `/api/auth/register` | Créer un nouveau compte utilisateur |
+| `POST` | `/api/auth/login` | Connexion (email + mot de passe) |
+| `GET` | `/api/auth/me` | Récupérer l'utilisateur connecté |
 
-### Cards
-- `GET /api/cards/list/:listId` - Get all cards for a list
-- `GET /api/cards/:id` - Get a specific card
-- `POST /api/cards` - Create a new card (supports dueDate and attachments)
-- `PUT /api/cards/:id` - Update a card
-- `DELETE /api/cards/:id` - Delete a card
+### 📊 Tableaux
 
-### File Uploads
-- `POST /api/uploads/upload` - Upload a file attachment
-- `GET /api/uploads/download/:fileName` - Download a file
-- `DELETE /api/uploads/:fileName` - Delete a file
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/api/boards` | Lister tous les tableaux |
+| `GET` | `/api/boards/:id` | Obtenir un tableau spécifique |
+| `POST` | `/api/boards` | Créer un nouveau tableau |
+| `PUT` | `/api/boards/:id` | Modifier un tableau |
+| `DELETE` | `/api/boards/:id` | Supprimer un tableau |
 
-### Comments
-- `GET /api/comments/card/:cardId` - Get all comments for a card
-- `POST /api/comments` - Create a new comment
-- `PUT /api/comments/:id` - Update a comment
-- `DELETE /api/comments/:id` - Delete a comment
+### 📝 Listes
 
-### Activity Logs
-- `GET /api/activity/card/:cardId` - Get activity log for a card
-- `GET /api/activity/board/:boardId` - Get activity log for a board
-- `POST /api/activity` - Create an activity log entry
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/api/lists/board/:boardId` | Lister les listes d'un tableau |
+| `GET` | `/api/lists/:id` | Obtenir une liste spécifique |
+| `POST` | `/api/lists` | Créer une nouvelle liste |
+| `PUT` | `/api/lists/:id` | Modifier une liste |
+| `DELETE` | `/api/lists/:id` | Supprimer une liste |
 
-### Templates
-- `GET /api/templates` - Get all board templates
-- `GET /api/templates/:id` - Get a specific template
-- `POST /api/templates` - Create a template from a board
-- `POST /api/templates/:id/create-board` - Create a board from a template
-- `DELETE /api/templates/:id` - Delete a template
+### 🎴 Cartes
 
-### Search & Filtering
-- `GET /api/search` - Advanced search with filters (query, boardId, dates, etc.)
-- `GET /api/search/boards` - Search boards by name/description
-- `GET /api/search/overdue` - Get overdue cards
-- `GET /api/search/due-soon` - Get cards due in the next 7 days
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/api/cards/list/:listId` | Lister les cartes d'une liste |
+| `GET` | `/api/cards/:id` | Obtenir une carte spécifique |
+| `POST` | `/api/cards` | Créer une carte (avec échéance & fichiers) |
+| `PUT` | `/api/cards/:id` | Modifier une carte |
+| `DELETE` | `/api/cards/:id` | Supprimer une carte |
 
-## Usage
+### 📎 Fichiers
 
-### Basic Operations
-1. **Login/Register**: On first visit, create an account or continue as guest
-2. **Create a Board**: Click "New Board" to create your first project board
-3. **Add Lists**: Click "+ Add a list" to create workflow columns (e.g., "To Do", "In Progress", "Done")
-4. **Create Cards**: Click "+ Add a card" to add tasks to your lists
-5. **Set Due Dates**: Add due dates when creating cards - overdue cards show in red, due soon in yellow
-6. **Attach Files**: Upload files when creating cards using the file attachment option
-7. **Drag & Drop**: Move cards between lists by dragging them
-8. **Delete**: Use the × button on cards or 🗑️ on lists to delete them
-9. **Real-time Updates**: Changes sync automatically across all connected users
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| `POST` | `/api/uploads/upload` | Uploader un fichier |
+| `GET` | `/api/uploads/download/:fileName` | Télécharger un fichier |
+| `DELETE` | `/api/uploads/:fileName` | Supprimer un fichier |
 
-### Advanced Features
-10. **View Card Details**: Click on a card to open detailed view with comments and activity
-11. **Add Comments**: In card detail view, write comments to collaborate with team members
-12. **Track Activity**: View all card activities and changes in the Activity tab
-13. **Search Cards**: Use the search bar to find cards by title, description, or filters
-14. **Advanced Filtering**: Filter by due date range, cards with comments, or attachments
-15. **Quick Filters**: Instantly view overdue cards or cards due in the next 7 days
-16. **Create Templates**: Save a board as a template for reuse
-17. **Use Templates**: Create new boards from existing templates with one click
+### 💬 Commentaires
 
-## Data Persistence
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/api/comments/card/:cardId` | Lister les commentaires d'une carte |
+| `POST` | `/api/comments` | Ajouter un commentaire |
+| `PUT` | `/api/comments/:id` | Modifier un commentaire |
+| `DELETE` | `/api/comments/:id` | Supprimer un commentaire |
 
-The application uses PostgreSQL for data storage:
-- **Database**: PostgreSQL 15 running in a Docker container
-- **Schema**: Automatically initialized on first startup
-- **Tables**: users, boards, lists, cards, comments, activity_logs, attachments, board_templates
-- **Migrations**: JSON data can be migrated to PostgreSQL using the migration function
-- **File Attachments**: Stored in `backend/uploads/` directory
-- **Volumes**: PostgreSQL data persists through Docker volume `postgres-data`
-- **Backup**: All data can be backed up using standard PostgreSQL tools (pg_dump)
+### 📜 Activité
 
-### Database Schema
-- **users**: User accounts with authentication
-- **boards**: Project boards with optional templates
-- **lists**: Task lists within boards
-- **cards**: Task cards with due dates and descriptions
-- **comments**: Card comments with user attribution
-- **activity_logs**: Activity tracking for cards and boards
-- **attachments**: File attachment metadata
-- **board_templates**: Reusable board templates
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/api/activity/card/:cardId` | Historique d'activité d'une carte |
+| `GET` | `/api/activity/board/:boardId` | Historique d'activité d'un tableau |
+| `POST` | `/api/activity` | Créer une entrée d'activité |
 
-## Development Notes
+### 🎨 Templates
 
-- The frontend uses React Beautiful DnD for drag-and-drop functionality
-- The backend provides a RESTful API with full CRUD operations
-- Real-time collaboration powered by Socket.IO WebSockets
-- Database operations use parameterized queries to prevent SQL injection
-- User authentication with SHA-256 password hashing
-- File uploads support base64 encoding with size limits (50MB)
-- Due dates displayed in DD/MM/YYYY format with PostgreSQL timestamp support
-- Visual indicators: red (overdue), yellow (due soon), gray (future)
-- CORS is enabled for cross-origin requests during development
-- The application follows a component-based architecture
-- Comments and activity logs are automatically tracked in the database
-- Advanced search uses PostgreSQL full-text search and filtering
-- Templates stored as JSONB for flexible structure
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/api/templates` | Lister tous les templates |
+| `GET` | `/api/templates/:id` | Obtenir un template spécifique |
+| `POST` | `/api/templates` | Créer un template depuis un tableau |
+| `POST` | `/api/templates/:id/create-board` | Créer un tableau depuis un template |
+| `DELETE` | `/api/templates/:id` | Supprimer un template |
 
-## Future Enhancements
+### 🔍 Recherche
 
-Completed features (delivered 5/12):
-- Possibility to delete cards and lists
-- User authentication and authorization
-- Real-time collaboration with WebSockets
-- Card due dates and notifications
-- File attachments
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| `GET` | `/api/search` | Recherche avancée multi-critères |
+| `GET` | `/api/search/boards` | Rechercher des tableaux |
+| `GET` | `/api/search/overdue` | Cartes en retard |
+| `GET` | `/api/search/due-soon` | Cartes à échéance proche (7j) |
 
-Completed features (delivered 18/12):
-- Database integration (PostgreSQL)
-- Advanced search and filtering
-- Card comments and activity history
-- Board templates
+---
 
-Potential features for future releases:
-- Email notifications for due dates and mentions
-- Card labels and tags for better organization
-- Advanced permission system (view, edit, admin roles)
-- Card checklists and subtasks
-- Board sharing with external users
-- Export boards to PDF or CSV
-- Calendar view for due dates
-- Mobile responsive design improvements
-- API rate limiting and authentication tokens
-- Automated backups and restore functionality
+## 📖 Guide d'utilisation
 
-## Contributing
+### Premiers pas
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. **🔐 Connexion**
+   - Créez un compte ou connectez-vous
+   - Mode invité disponible pour tester
 
-## License
+2. **📊 Créer un tableau**
+   - Cliquez sur "Nouveau tableau"
+   - Donnez-lui un nom et une description
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+3. **📝 Organiser le workflow**
+   - Ajoutez des listes : "À faire", "En cours", "Terminé"
+   - Personnalisez selon vos besoins
+
+4. **🎴 Gérer les tâches**
+   - Créez des cartes dans vos listes
+   - Ajoutez descriptions, échéances et fichiers
+   - Glissez-déposez pour réorganiser
+
+### Fonctionnalités avancées
+
+#### 📅 Échéances visuelles
+- 🔴 **Rouge** : Tâches en retard
+- 🟡 **Jaune** : Échéance proche (< 7 jours)
+- ⚪ **Gris** : Échéance future
+
+#### 💬 Collaboration
+- Cliquez sur une carte pour voir les détails
+- Ajoutez des commentaires
+- Consultez l'historique d'activité
+- Les mises à jour sont synchronisées en temps réel
+
+#### 🔍 Recherche intelligente
+- **Recherche textuelle** : Titre, description, commentaires
+- **Filtres temporels** : Plage de dates personnalisée
+- **Filtres rapides** : En retard / À venir
+- **Critères multiples** : Fichiers, commentaires, etc.
+
+#### 🎨 Templates
+- Sauvegardez un tableau comme modèle
+- Créez de nouveaux projets depuis un template
+- Gagnez du temps sur les projets récurrents
+
+---
+
+## 🗄️ Base de données
+
+### Architecture PostgreSQL
+
+EpiTrello utilise **PostgreSQL 15** pour une persistance robuste :
+
+#### Schéma de la base
+```sql
+users              # Comptes utilisateurs
+  ├─ id (PK)
+  ├─ email (UNIQUE)
+  ├─ password_hash
+  └─ created_at
+
+boards             # Tableaux de projets
+  ├─ id (PK)
+  ├─ name
+  ├─ description
+  ├─ user_id (FK → users)
+  └─ created_at
+
+lists              # Listes de tâches
+  ├─ id (PK)
+  ├─ title
+  ├─ board_id (FK → boards)
+  ├─ position
+  └─ created_at
+
+cards              # Cartes de tâches
+  ├─ id (PK)
+  ├─ title
+  ├─ description
+  ├─ list_id (FK → lists)
+  ├─ due_date (TIMESTAMP)
+  ├─ position
+  └─ created_at
+
+comments           # Commentaires
+  ├─ id (PK)
+  ├─ card_id (FK → cards)
+  ├─ user_id (FK → users)
+  ├─ content (TEXT)
+  └─ created_at
+
+activity_logs      # Historique d'activité
+  ├─ id (PK)
+  ├─ card_id (FK → cards)
+  ├─ board_id (FK → boards)
+  ├─ user_id (FK → users)
+  ├─ action_type
+  ├─ description
+  └─ created_at
+
+attachments        # Métadonnées des fichiers
+  ├─ id (PK)
+  ├─ card_id (FK → cards)
+  ├─ file_name
+  ├─ original_name
+  ├─ file_size
+  └─ uploaded_at
+
+board_templates    # Templates réutilisables
+  ├─ id (PK)
+  ├─ name
+  ├─ description
+  ├─ template_data (JSONB)
+  └─ created_at
+```
+
+#### Caractéristiques
+- ✅ **Initialisation automatique** au premier démarrage
+- ✅ **Requêtes paramétrées** (protection SQL injection)
+- ✅ **Indexes** sur les clés étrangères pour performance
+- ✅ **Volume Docker** pour persistance des données
+- ✅ **Recherche full-text** PostgreSQL native
+- ✅ **JSONB** pour structures flexibles (templates)
+
+#### Sauvegarde et migration
+```bash
+# Backup de la base
+docker exec epitrello-db pg_dump -U postgres epitrello > backup.sql
+
+# Restauration
+docker exec -i epitrello-db psql -U postgres epitrello < backup.sql
+
+# Accès direct à PostgreSQL
+docker exec -it epitrello-db psql -U postgres -d epitrello
+```
+
+---
+
+## 🔧 Développement
+
+### Architecture technique
+
+#### Frontend (React)
+- **Hooks** : useState, useEffect pour la gestion d'état
+- **Context API** : ThemeContext pour le thème global
+- **WebSocket** : Socket.IO client pour temps réel
+- **Drag & Drop** : React Beautiful DnD
+- **Routing** : Gestion des vues avec React Router (si applicable)
+
+#### Backend (Node.js/Express)
+- **Architecture RESTful** avec routes modulaires
+- **Middleware** : CORS, JSON parsing, authentification
+- **WebSocket** : Socket.IO serveur pour broadcasting
+- **ORM** : Requêtes SQL natives avec node-postgres
+- **Sécurité** : 
+  - Hachage SHA-256 pour mots de passe
+  - Requêtes paramétrées (SQL injection)
+  - Tokens de session
+  - Validation des entrées
+
+#### Communication temps réel
+```javascript
+// Événements Socket.IO
+'boardUpdated'    // Modifications de tableau
+'listUpdated'     // Modifications de liste
+'cardUpdated'     // Modifications de carte
+'cardCreated'     // Nouvelle carte
+'cardDeleted'     // Suppression de carte
+```
+
+### Tests
+
+Le projet inclut des tests unitaires :
+
+```bash
+cd backend
+npm test              # Lance tous les tests
+npm test -- auth      # Tests d'authentification
+npm test -- cards     # Tests des cartes
+```
+
+Tests couverts :
+- ✅ Authentification (register, login)
+- ✅ Opérations CRUD sur les cartes
+- ✅ Gestion des listes
+- ✅ Upload de fichiers
+
+### Variables d'environnement
+
+#### Backend
+```env
+PORT=3001
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=epitrello
+```
+
+#### Docker Compose
+Les variables sont configurées dans [docker-compose.yml](docker-compose.yml)
+
+---
+
+## 🚀 Roadmap
+
+### ✅ Phase 1 - Fonctionnalités de base (Livrée le 5/12)
+- [x] Gestion des tableaux, listes et cartes
+- [x] Système de suppression avec confirmation
+- [x] Drag & drop intuitif
+- [x] Dates limites avec indicateurs visuels
+- [x] Notifications d'échéances
+- [x] Pièces jointes (jusqu'à 50MB)
+- [x] Authentification utilisateur
+- [x] Collaboration temps réel (WebSocket)
+
+### ✅ Phase 2 - Fonctionnalités avancées (Livrée le 18/12)
+- [x] Migration PostgreSQL complète
+- [x] Recherche avancée et filtres multi-critères
+- [x] Système de commentaires
+- [x] Historique d'activité détaillé
+- [x] Templates de tableaux réutilisables
+- [x] Filtres rapides (en retard, à venir)
+
+### 🔮 Phase 3 - Améliorations futures
+
+#### Haute priorité
+- [ ] **Notifications email** pour échéances et mentions
+- [ ] **Labels et tags** personnalisables pour les cartes
+- [ ] **Système de permissions** (lecteur, éditeur, admin)
+- [ ] **Checklists** et sous-tâches dans les cartes
+- [ ] **Vue calendrier** pour visualiser les échéances
+- [ ] **Design responsive** optimisé mobile
+
+#### Moyenne priorité
+- [ ] **Partage de tableaux** avec utilisateurs externes
+- [ ] **Export** PDF/CSV des tableaux
+- [ ] **Webhooks** pour intégrations externes
+- [ ] **API tokens** et rate limiting
+- [ ] **Mode hors ligne** avec synchronisation
+- [ ] **Thèmes** personnalisables avancés
+
+#### Basse priorité
+- [ ] **Automatisations** type "Butler" (règles)
+- [ ] **Intégrations** (Slack, GitHub, Google Drive)
+- [ ] **Analytics** et tableaux de bord
+- [ ] **Sauvegardes automatiques** programmées
+- [ ] **Mode sombre automatique** (selon l'heure)
+- [ ] **Raccourcis clavier** avancés
+
+---
+
+## 🤝 Contribuer
+
+Les contributions sont les bienvenues ! Voici comment participer :
+
+### Processus
+
+1. **Fork** le repository
+2. **Créez** une branche pour votre fonctionnalité
+   ```bash
+   git checkout -b feature/ma-nouvelle-fonctionnalite
+   ```
+3. **Committez** vos changements
+   ```bash
+   git commit -m "✨ Ajout d'une super fonctionnalité"
+   ```
+4. **Pushez** vers votre fork
+   ```bash
+   git push origin feature/ma-nouvelle-fonctionnalite
+   ```
+5. **Ouvrez** une Pull Request
+
+### Conventions
+
+#### Commits
+Utilisez des préfixes émoji pour plus de clarté :
+- ✨ `:sparkles:` - Nouvelle fonctionnalité
+- 🐛 `:bug:` - Correction de bug
+- 📝 `:memo:` - Documentation
+- 🎨 `:art:` - Style/format du code
+- ⚡ `:zap:` - Performance
+- ♻️ `:recycle:` - Refactoring
+- 🔒 `:lock:` - Sécurité
+- ✅ `:white_check_mark:` - Tests
+
+#### Code
+- Suivre le style existant (ESLint/Prettier)
+- Commenter les fonctions complexes
+- Ajouter des tests pour les nouvelles fonctionnalités
+- Mettre à jour la documentation si nécessaire
+
+---
+
+## 📄 Licence
+
+Ce projet est sous licence **MIT** - voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+---
+
+## 👥 Auteurs & Remerciements
+
+Développé avec ❤️ dans le cadre du projet **Tec_3**
+
+### Technologies utilisées
+Merci aux créateurs de ces excellents outils :
+- [React](https://reactjs.org/) - Interface utilisateur
+- [Node.js](https://nodejs.org/) - Runtime backend
+- [PostgreSQL](https://www.postgresql.org/) - Base de données
+- [Socket.IO](https://socket.io/) - Communication temps réel
+- [React Beautiful DnD](https://github.com/atlassian/react-beautiful-dnd) - Drag & drop
+
+---
+
+<div align="center">
+
+**⭐ Si ce projet vous plaît, n'hésitez pas à lui donner une étoile !**
+
+[🐛 Signaler un bug](../../issues) • [💡 Proposer une fonctionnalité](../../issues) • [📖 Documentation](../../wiki)
+
+</div>
