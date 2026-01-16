@@ -100,9 +100,7 @@ docker compose up --build
 
 ## 📖 Documentation
 
-- [COMMENTS.md](COMMENTS.md) - Système de commentaires
-- [TEST_COMMENTS.md](TEST_COMMENTS.md) - Guide de test
-- [FIXES_APPLIED.md](FIXES_APPLIED.md) - Correctifs appliqués
+- **[📚 Documentation complète des fonctionnalités](docs/FEATURES.md)** - Guide détaillé de toutes les fonctionnalités
 
 ## 📄 Licence
 
