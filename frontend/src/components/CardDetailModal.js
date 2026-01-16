@@ -74,8 +74,50 @@ const CardDetailModal = ({ card, onClose, onUpdate, userId }) => {
               <h3>Attachments ({card.attachments.length})</h3>
               <div className="attachments-list">
                 {card.attachments.map((att, idx) => (
-                  <div key={idx} className="attachment-item">
-                    📎 {att.fileName}
+                  <div key={idx} className="attachment-item" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '12px',
+                    backgroundColor: 'var(--bg-tertiary)',
+                    borderRadius: 'var(--border-radius-sm)',
+                    marginBottom: '8px',
+                    border: '1px solid var(--border-color)',
+                    transition: 'all var(--transition-speed) ease'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+                      <span style={{ fontSize: '20px' }}>📎</span>
+                      <div>
+                        <div style={{ fontWeight: '500', color: 'var(--text-primary)' }}>
+                          {att.originalName || att.fileName}
+                        </div>
+                        {att.fileSize && (
+                          <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                            {(att.fileSize / 1024).toFixed(1)} KB
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <a
+                      href={`http://localhost:3001/api/uploads/download/${att.fileName}`}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        padding: '6px 12px',
+                        backgroundColor: 'var(--accent-primary)',
+                        color: 'white',
+                        borderRadius: 'var(--border-radius-sm)',
+                        textDecoration: 'none',
+                        fontSize: '13px',
+                        fontWeight: '500',
+                        transition: 'all var(--transition-speed) ease'
+                      }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = '#764ba2'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--accent-primary)'}
+                    >
+                      Download
+                    </a>
                   </div>
                 ))}
               </div>

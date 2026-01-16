@@ -20,7 +20,27 @@ router.get('/list/:listId', async (req, res) => {
             'SELECT * FROM cards WHERE list_id = $1 ORDER BY position',
             [req.params.listId]
         );
-        res.json(result.rows.map(toCamelCase));
+        
+        // Fetch attachments for each card
+        const cardsWithAttachments = await Promise.all(
+            result.rows.map(async (card) => {
+                const attachments = await pool.query(
+                    'SELECT id, filename, original_name, file_size FROM attachments WHERE card_id = $1',
+                    [card.id]
+                );
+                return {
+                    ...toCamelCase(card),
+                    attachments: attachments.rows.map(att => ({
+                        id: att.id,
+                        fileName: att.filename,  // Le nom stocké sur le serveur
+                        originalName: att.original_name,  // Le nom original du fichier
+                        fileSize: att.file_size
+                    }))
+                };
+            })
+        );
+        
+        res.json(cardsWithAttachments);
     } catch (error) {
         console.error('Error fetching cards:', error);
         res.status(500).json({ error: 'Failed to fetch cards' });
@@ -34,7 +54,24 @@ router.get('/:id', async (req, res) => {
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Card not found' });
         }
-        res.json(toCamelCase(result.rows[0]));
+        
+        // Fetch attachments
+        const attachments = await pool.query(
+            'SELECT id, filename, original_name, file_size FROM attachments WHERE card_id = $1',
+            [req.params.id]
+        );
+        
+        const card = {
+            ...toCamelCase(result.rows[0]),
+            attachments: attachments.rows.map(att => ({
+                id: att.id,
+                fileName: att.filename,  // Le nom stocké sur le serveur
+                originalName: att.original_name,  // Le nom original du fichier
+                fileSize: att.file_size
+            }))
+        };
+        
+        res.json(card);
     } catch (error) {
         console.error('Error fetching card:', error);
         res.status(500).json({ error: 'Failed to fetch card' });
@@ -56,17 +93,40 @@ router.post('/', async (req, res) => {
             ]
         );
         
+        const cardId = result.rows[0].id;
+        
         // Handle attachments if provided
         if (req.body.attachments && req.body.attachments.length > 0) {
             for (const attachment of req.body.attachments) {
                 await pool.query(
                     'INSERT INTO attachments (card_id, filename, original_name, file_size) VALUES ($1, $2, $3, $4)',
-                    [result.rows[0].id, attachment.fileName, attachment.fileName, attachment.size || 0]
+                    [
+                        cardId, 
+                        attachment.storedName || attachment.fileName, 
+                        attachment.fileName, 
+                        attachment.size || 0
+                    ]
                 );
             }
         }
         
-        res.status(201).json(toCamelCase(result.rows[0]));
+        // Fetch attachments for the newly created card
+        const attachments = await pool.query(
+            'SELECT id, filename, original_name, file_size FROM attachments WHERE card_id = $1',
+            [cardId]
+        );
+        
+        const card = {
+            ...toCamelCase(result.rows[0]),
+            attachments: attachments.rows.map(att => ({
+                id: att.id,
+                fileName: att.filename,
+                originalName: att.original_name,
+                fileSize: att.file_size
+            }))
+        };
+        
+        res.status(201).json(card);
     } catch (error) {
         console.error('Error creating card:', error);
         res.status(500).json({ error: 'Failed to create card' });

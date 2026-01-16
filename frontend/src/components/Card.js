@@ -95,9 +95,26 @@ const Card = ({ card, index, onDelete, onClick }) => {
             </p>
           )}
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-            {card.dueDate && (
+            {card.attachments && card.attachments.length > 0 && (
               <span 
                 style={{ 
+                  fontSize: '12px',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  backgroundColor: 'var(--bg-tertiary)',
+                  color: 'var(--text-primary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontWeight: '500'
+                }}
+              >
+                📎 {card.attachments.length}
+              </span>
+            )}
+            {card.dueDate && (
+              <span 
+                style={{  
                   fontSize: '12px', 
                   padding: '4px 10px', 
                   borderRadius: '6px',
@@ -114,23 +131,6 @@ const Card = ({ card, index, onDelete, onClick }) => {
                 }}
               >
                 📅 {formatDate(card.dueDate)}
-              </span>
-            )}
-            {card.attachments && card.attachments.length > 0 && (
-              <span 
-                style={{ 
-                  fontSize: '12px', 
-                  padding: '4px 10px', 
-                  borderRadius: '6px',
-                  backgroundColor: 'var(--bg-tertiary)',
-                  color: 'var(--text-primary)',
-                  fontWeight: '600',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}
-              >
-                📎 {card.attachments.length}
               </span>
             )}
           </div>

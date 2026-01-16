@@ -230,13 +230,14 @@ function App() {
       // Upload attachments if any
       let uploadedAttachments = [];
       if (cardData.attachments && cardData.attachments.length > 0) {
-        const cardId = Date.now().toString();
+        // Use a temporary card ID that will be replaced by the real one
+        const tempCardId = 'temp_' + Date.now();
         const uploadPromises = cardData.attachments.map(async (att) => {
           try {
             const uploadResponse = await uploadsApi.upload({
               fileName: att.fileName,
               fileData: att.fileData,
-              cardId: cardId
+              cardId: tempCardId
             });
             return {
               fileName: att.fileName,
