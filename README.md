@@ -1,6 +1,298 @@
 <div align="center">
 
-# 📋 EpiTrello
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3. Réinitialiser la base : `docker-compose down -v && docker-compose up --build`2. Vérifier les logs : `docker-compose logs backend`1. Consulter [COMMENTS.md](COMMENTS.md) pour plus de détailsEn cas de problème non résolu :## Support5. **Schéma DB** : `backend/db.js`4. **Code backend** : `backend/routes/comments.js`3. **Code frontend** : `frontend/src/components/CardComments.js`2. **Tests unitaires** : `backend/routes/__tests__/comments.test.js`1. **Documentation complète** : [COMMENTS.md](COMMENTS.md)Une fois les tests réussis, explorez :## Prochaines étapes- [x] Conservation si utilisateur supprimé- [x] Commentaires anonymes (sans userId)- [x] Logging automatique dans l'activité- [x] Onglets Comments / Activity- [x] Tri chronologique- [x] Affichage de la date- [x] Affichage de l'auteur (nom + email)- [x] Suppression de commentaires- [x] Modification de commentaires- [x] Affichage des commentaires- [x] Création de commentaires## Fonctionnalités à tester```docker-compose restart# Redémarrer si nécessairedocker-compose ps# Vérifier que tout tourne```bash**Solution :****Cause :** Le backend n'est pas démarré ou PostgreSQL n'est pas accessible### "Connection refused" ou "ECONNREFUSED"4. Vérifier les requêtes réseau (F12 > Network)3. Vérifier les erreurs dans la console du navigateur (F12)```docker exec epitrello-db-1 psql -U postgres -d epitrello -c "\d comments"```bash2. Vérifier que la table existe```docker-compose logs backend | grep -i "Database initialized"```bash1. Vérifier que le backend est connecté à PostgreSQL**Vérifications :**### Les commentaires n'apparaissent pas- Le système supporte aussi les commentaires anonymes (userId = null)- Se connecter ou créer un compte**Solution :** **Cause :** Aucun utilisateur connecté### "Cannot read property 'id' of null"```./fix_comments.sh```bash**Solution :**### "Column 'updated_at' does not exist"## Problèmes courants```Tests:       8 passed, 8 totalTest Suites: 1 passed, 1 total      ✓ should return 404 if comment not found      ✓ should delete a comment    DELETE /api/comments/:id      ✓ should return 404 if comment not found      ✓ should update a comment    PUT /api/comments/:id      ✓ should create comment without userId      ✓ should create a new comment    POST /api/comments      ✓ should handle database errors      ✓ should get all comments for a card    GET /api/comments/card/:cardId  Comments APIPASS  routes/__tests__/comments.test.js```Résultat attendu :```npm test -- comments.test.jscd backend```bash## Tests automatisés```ORDER BY c.created_at DESC;LEFT JOIN cards card ON c.card_id = card.idLEFT JOIN users u ON c.user_id = u.idFROM comments c    card.title as card_title    u.name as author,    c.created_at,    c.content,    c.id,SELECT -- Voir les commentaires avec auteursSELECT * FROM activity_logs;-- Voir l'activitéSELECT * FROM comments;-- Voir les commentaires```sql### Vérifier les tables```psql -U postgres -d epitrello# Ou localementdocker exec -it epitrello-db-1 psql -U postgres -d epitrello# Via Docker```bash### Se connecter à PostgreSQL## Vérification de la base de données### 3. Suivre les étapes de l'Option 1```npm startnpm installcd frontend# Dans un autre terminal```bash### 2. Lancer le frontend```npm startnpm installcd backend```bash### 1. Lancer le backend## Option 3 : Test avec Node.js```curl -X DELETE http://localhost:3001/api/comments/1```bash### 5. Supprimer un commentaire```  }'    "content": "Commentaire modifié"  -d '{  -H "Content-Type: application/json" \curl -X PUT http://localhost:3001/api/comments/1 \```bash### 4. Modifier un commentaire```]  }    "created_at": "2026-01-16T..."    "user_email": "test@example.com",    "user_name": "Test User",    "content": "Ceci est un commentaire de test",    "user_id": 1,    "card_id": 1,    "id": 1,  {[```jsonRésultat attendu :```curl http://localhost:3001/api/comments/card/1```bash### 3. Récupérer les commentaires```  }'    "content": "Ceci est un commentaire de test"    "userId": 1,    "cardId": 1,  -d '{  -H "Content-Type: application/json" \curl -X POST http://localhost:3001/api/comments \```bash### 2. Créer un commentaire```  }'    "name": "Test User"    "password": "password123",    "email": "test@example.com",  -d '{  -H "Content-Type: application/json" \curl -X POST http://localhost:3001/api/auth/register \```bash### 1. Créer un utilisateur## Option 2 : Test manuel de l'API```docker-compose restart backend# Redémarrer./fix_comments.sh# Réparer la base de donnéesdocker-compose logs dbdocker-compose logs backend | grep -i comment# Vérifier les logs```bash### 4. En cas de problème   - Confirmer la suppression   - Cliquer "Delete" sur un commentaire   - Retourner à l'onglet "Comments"7. **Supprimer un commentaire**   - Voir l'historique : création de carte, ajout de commentaire   - Cliquer sur l'onglet "Activity"6. **Tester l'activité**   - Le commentaire apparaît avec votre nom et l'heure   - Cliquer "Add Comment"   - Entrer un commentaire dans la zone de texte   - En bas de la modale, voir l'onglet "Comments"5. **Tester les commentaires**   - Une modale s'ouvre avec les détails   - Cliquer sur la carte créée4. **Ouvrir les détails de la carte**   - Ajouter une description (optionnel)   - Entrer un titre "Test des commentaires"   - Dans la liste, cliquer "+ Ajouter une carte"3. **Créer une carte**   - Nommer la liste "À tester"   - Cliquer sur "+ Ajouter une liste"2. **Créer une liste**   - Entrer un nom, par exemple "Test Commentaires"   - Cliquer sur "Nouveau tableau"1. **Créer un tableau**### 3. Tester les commentaires- Créer un compte ou se connecter- Ouvrir http://localhost:3000### 2. Accéder à l'application```docker-compose up --buildcd EpiTrellogit clone <votre-repo># Cloner et démarrer```bash### 1. Démarrer l'application## Option 1 : Test avec Docker (Recommandé)Ce guide vous permet de tester rapidement le système de commentaires d'EpiTrello.# 📋 EpiTrello
 
 ### Gestionnaire de projets moderne inspiré de Trello
 
@@ -9,7 +301,7 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=flat&logo=postgresql)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker)](https://www.docker.com/)
 
-[Démo](#démarrage-rapide) • [Documentation](#documentation-api) • [Fonctionnalités](#fonctionnalités)
+[Démo](#démarrage-rapide) • [Documentation](#documentation-api) • [Fonctionnalités](#fonctionnalités) • [Commentaires](COMMENTS.md)
 
 </div>
 
@@ -470,6 +762,7 @@ cd backend
 npm test              # Lance tous les tests
 npm test -- auth      # Tests d'authentification
 npm test -- cards     # Tests des cartes
+npm test -- comments  # Tests des commentaires
 ```
 
 Tests couverts :
@@ -477,6 +770,7 @@ Tests couverts :
 - ✅ Opérations CRUD sur les cartes
 - ✅ Gestion des listes
 - ✅ Upload de fichiers
+- ✅ Système de commentaires
 
 ### Variables d'environnement
 
@@ -492,6 +786,32 @@ DB_NAME=epitrello
 
 #### Docker Compose
 Les variables sont configurées dans [docker-compose.yml](docker-compose.yml)
+
+### 🐛 Dépannage
+
+#### Les commentaires ne fonctionnent pas
+
+Si vous rencontrez des problèmes avec les commentaires :
+
+```bash
+# Exécuter le script de réparation
+./fix_comments.sh
+```
+
+Voir la [documentation complète des commentaires](COMMENTS.md) pour plus de détails.
+
+#### Réinitialiser la base de données
+
+```bash
+# Arrêter les conteneurs
+docker-compose down
+
+# Supprimer le volume de la base
+docker volume rm epitrello_postgres-data
+
+# Redémarrer
+docker-compose up --build
+```
 
 ---
 

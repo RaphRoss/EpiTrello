@@ -58,7 +58,7 @@ router.put('/:id', async (req, res) => {
         const { content } = req.body;
         
         const result = await pool.query(
-            'UPDATE comments SET content = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
+            'UPDATE comments SET content = $1 WHERE id = $2 RETURNING *',
             [content, req.params.id]
         );
 

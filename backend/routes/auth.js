@@ -1,15 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const crypto = require('crypto');
-
-const usersPath = path.join(__dirname, '../data/users.json');
-
-// Initialize users file if it doesn't exist
-if (!fs.existsSync(usersPath)) {
-    fs.writeFileSync(usersPath, JSON.stringify([], null, 2));
-}
+const { pool } = require('../db');
 
 // Simple hash function (in production, use bcrypt)
 const hashPassword = (password) => {
@@ -22,7 +14,7 @@ const generateToken = (userId) => {
 };
 
 // Register new user
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
@@ -30,30 +22,29 @@ router.post('/register', (req, res) => {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        const users = JSON.parse(fs.readFileSync(usersPath, 'utf8'));
-
         // Check if user already exists
-        if (users.find(u => u.email === email || u.username === username)) {
+        const existingUser = await pool.query(
+            'SELECT * FROM users WHERE email = $1',
+            [email]
+        );
+
+        if (existingUser.rows.length > 0) {
             return res.status(409).json({ error: 'User already exists' });
         }
 
-        const newUser = {
-            id: Date.now().toString(),
-            username,
-            email,
-            password: hashPassword(password),
-            createdAt: new Date().toISOString()
-        };
+        // Insert new user
+        const result = await pool.query(
+            'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email',
+            [username, email, hashPassword(password)]
+        );
 
-        users.push(newUser);
-        fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
-
+        const newUser = result.rows[0];
         const token = generateToken(newUser.id);
 
         res.status(201).json({
             user: {
                 id: newUser.id,
-                username: newUser.username,
+                username: newUser.name,
                 email: newUser.email
             },
             token
@@ -65,7 +56,7 @@ router.post('/register', (req, res) => {
 });
 
 // Login user
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -73,8 +64,12 @@ router.post('/login', (req, res) => {
             return res.status(400).json({ error: 'Email and password are required' });
         }
 
-        const users = JSON.parse(fs.readFileSync(usersPath, 'utf8'));
-        const user = users.find(u => u.email === email);
+        const result = await pool.query(
+            'SELECT * FROM users WHERE email = $1',
+            [email]
+        );
+
+        const user = result.rows[0];
 
         if (!user || user.password !== hashPassword(password)) {
             return res.status(401).json({ error: 'Invalid credentials' });
@@ -85,7 +80,7 @@ router.post('/login', (req, res) => {
         res.json({
             user: {
                 id: user.id,
-                username: user.username,
+                username: user.name,
                 email: user.email
             },
             token
@@ -97,7 +92,7 @@ router.post('/login', (req, res) => {
 });
 
 // Get current user (simple token validation)
-router.get('/me', (req, res) => {
+router.get('/me', async (req, res) => {
     try {
         const token = req.headers.authorization?.replace('Bearer ', '');
 
@@ -106,8 +101,13 @@ router.get('/me', (req, res) => {
         }
 
         const userId = token.split('-')[1];
-        const users = JSON.parse(fs.readFileSync(usersPath, 'utf8'));
-        const user = users.find(u => u.id === userId);
+        
+        const result = await pool.query(
+            'SELECT id, name, email FROM users WHERE id = $1',
+            [userId]
+        );
+
+        const user = result.rows[0];
 
         if (!user) {
             return res.status(401).json({ error: 'Invalid token' });
@@ -115,7 +115,7 @@ router.get('/me', (req, res) => {
 
         res.json({
             id: user.id,
-            username: user.username,
+            username: user.name,
             email: user.email
         });
     } catch (error) {
