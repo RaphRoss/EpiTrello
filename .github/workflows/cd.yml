@@ -1,11 +1,22 @@
 name: CD - Deploy to Production
 
 on:
-  push:
-    branches: [ main ]
-    tags:
-      - 'v*'
+  # Déploiement manuel uniquement - configure les secrets avant d'utiliser
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+  # Décommenter après configuration des secrets:
+  # push:
+  #   branches: [ main ]
+  # tags:
+  #   - 'v*'
 
 jobs:
   deploy:
@@ -60,7 +71,7 @@ jobs:
   deploy-docker-swarm:
     name: Deploy to Docker Swarm
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: false  # Désactivé par défaut - activer après configuration de SWARM_SSH_KEY
     needs: deploy
 
     steps:

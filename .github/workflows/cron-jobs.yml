@@ -1,11 +1,12 @@
 name: Scheduled Tasks
 
 on:
-  schedule:
-    # Run security audit daily at 2 AM UTC
-    - cron: '0 2 * * *'
-    # Run backup weekly on Sunday at 3 AM UTC
-    - cron: '0 3 * * 0'
+  # Décommenter après configuration des secrets:
+  # schedule:
+  #   # Run security audit daily at 2 AM UTC
+  #   - cron: '0 2 * * *'
+  #   # Run backup weekly on Sunday at 3 AM UTC
+  #   - cron: '0 3 * * 0'
   workflow_dispatch:
 
 jobs:
@@ -57,7 +58,7 @@ jobs:
   database-backup:
     name: Weekly Database Backup
     runs-on: ubuntu-latest
-    if: github.event.schedule == '0 3 * * 0'
+    if: false  # Désactivé par défaut - activer après configuration SSH_PRIVATE_KEY
 
     steps:
       - name: Setup SSH
