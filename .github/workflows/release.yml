@@ -88,7 +88,7 @@ jobs:
             .
 
       - name: Upload release artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-archive
           path: epitrello-${{ github.ref_name }}.tar.gz

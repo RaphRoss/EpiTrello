@@ -54,7 +54,7 @@ jobs:
 
       - name: Upload backend coverage
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: backend-coverage
           path: backend/coverage
@@ -91,7 +91,7 @@ jobs:
         run: npm run build
 
       - name: Upload frontend build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: frontend-build
           path: frontend/build
