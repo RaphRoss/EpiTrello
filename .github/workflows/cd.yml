@@ -11,6 +11,8 @@ jobs:
   deploy:
     name: Deploy to Production
     runs-on: ubuntu-latest
+    # Skip deploy job if required secrets are not configured
+    if: secrets.SSH_PRIVATE_KEY != '' && secrets.SERVER_HOST != ''
     environment: production
 
     steps:
@@ -48,7 +50,7 @@ jobs:
           curl -f ${{ secrets.APP_URL }}/health || exit 1
 
       - name: Notify deployment
-        if: always()
+        if: always() && secrets.SLACK_WEBHOOK_URL != ''
         uses: 8398a7/action-slack@v3
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -59,7 +61,7 @@ jobs:
   deploy-docker-swarm:
     name: Deploy to Docker Swarm
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.SWARM_SSH_KEY != ''
     needs: deploy
 
     steps:
@@ -108,7 +110,7 @@ jobs:
           EOF
 
       - name: Notify rollback
-        if: always()
+        if: always() && secrets.SLACK_WEBHOOK_URL != ''
         uses: 8398a7/action-slack@v3
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
