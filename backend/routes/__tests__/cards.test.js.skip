@@ -1,53 +1,57 @@
 const request = require('supertest');
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 const cardsRouter = require('../cards');
+
+// Mock the database connection
+jest.mock('../../db', () => ({
+    query: jest.fn()
+}));
+
+const pool = require('../../db');
 
 // Create a test Express app
 const app = express();
 app.use(express.json());
 app.use('/api/cards', cardsRouter);
 
-// Mock data paths
-const testDataPath = path.join(__dirname, '../data/cards.json');
-
 // Mock data
 const mockCards = [
-  {
-    id: '1',
-    title: 'Test Card 1',
-    description: 'Description 1',
-    listId: 'list1',
-    position: 0,
-    createdAt: '2024-01-01T00:00:00.000Z'
-  },
-  {
-    id: '2',
-    title: 'Test Card 2',
-    description: 'Description 2',
-    listId: 'list1',
-    position: 1,
-    createdAt: '2024-01-01T00:00:00.000Z'
-  },
-  {
-    id: '3',
-    title: 'Test Card 3',
-    description: 'Description 3',
-    listId: 'list2',
-    position: 0,
-    createdAt: '2024-01-01T00:00:00.000Z'
-  }
+    {
+        id: 1,
+        title: 'Test Card 1',
+        description: 'Description 1',
+        list_id: 1,
+        position: 0,
+        due_date: null,
+        created_at: '2024-01-01T00:00:00.000Z',
+        attachments: []
+    },
+    {
+        id: 2,
+        title: 'Test Card 2',
+        description: 'Description 2',
+        list_id: 1,
+        position: 1,
+        due_date: null,
+        created_at: '2024-01-01T00:00:00.000Z',
+        attachments: []
+    },
+    {
+        id: 3,
+        title: 'Test Card 3',
+        description: 'Description 3',
+        list_id: 2,
+        position: 0,
+        due_date: null,
+        created_at: '2024-01-01T00:00:00.000Z',
+        attachments: []
+    }
 ];
 
-// Mock fs module
-jest.mock('fs');
-
 describe('Cards API Routes', () => {
-  beforeEach(() => {
-    // Reset mocks before each test
-    jest.clearAllMocks();
-    // Setup default mock implementation
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
     fs.readFileSync.mockReturnValue(JSON.stringify(mockCards));
     fs.writeFileSync.mockImplementation(() => {});
   });
