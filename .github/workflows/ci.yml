@@ -117,7 +117,7 @@ jobs:
 
       - name: Extract metadata for backend
         id: meta-backend
-        uses: docker/metadata-action@v5j'ai besoin de faire un système de chat dans les rooms, ca vas être très simple le chat sera en bas a gauche de l'écran et sera transparent il apparaîtra si il y a un nouveau message et disparatra automatiquement si il n'y a pas eu de message pendant 15sec, je pourrais ouvir le chat avec T et écrirer mon message puis l'envoyer avec ENTRER, dans le chat mon message sera présenter par : Pseudo : message
+        uses: docker/metadata-action@v5
         with:
           images: ${{ secrets.DOCKER_USERNAME }}/epitrello-backend
           tags: |
