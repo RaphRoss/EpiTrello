@@ -83,7 +83,7 @@ SERVER_USER: user
 SERVER_HOST: votre-serveur.com
 DEPLOY_PATH: /path/to/app
 APP_URL: https://epitrello.com
-SLACK_WEBHOOK: webhook-url (optionnel)
+SLACK_WEBHOOK_URL: webhook-url (optionnel)
 SWARM_SSH_KEY: clé-pour-swarm (optionnel)
 SWARM_MANAGER: manager-node (optionnel)
 ```
@@ -226,7 +226,7 @@ APP_URL=https://epitrello.yourserver.com
 
 #### Notifications (optionnel)
 ```
-SLACK_WEBHOOK=https://hooks.slack.com/services/...
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
 ```
 
 #### Docker Swarm (optionnel)

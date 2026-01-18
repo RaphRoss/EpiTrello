@@ -50,10 +50,11 @@ jobs:
       - name: Notify deployment
         if: always()
         uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
           status: ${{ job.status }}
           text: 'Deployment to production: ${{ job.status }}'
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
 
   deploy-docker-swarm:
     name: Deploy to Docker Swarm
@@ -107,8 +108,10 @@ jobs:
           EOF
 
       - name: Notify rollback
+        if: always()
         uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
           status: 'warning'
           text: 'Deployment failed - Rollback executed'
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
