@@ -10,7 +10,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "body-parser": "^2.2.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "pg": "^8.11.3",
