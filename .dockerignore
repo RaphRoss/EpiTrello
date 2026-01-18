@@ -20,3 +20,4 @@ coverage/
 backend/uploads/*
 !backend/uploads/.gitkeep
 backend/data/*.json
+backend/data/*.db
