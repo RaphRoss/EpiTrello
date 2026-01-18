@@ -57,7 +57,7 @@ jobs:
   database-backup:
     name: Weekly Database Backup
     runs-on: ubuntu-latest
-    if: github.event.schedule == '0 3 * * 0' && secrets.SSH_PRIVATE_KEY != ''
+    if: github.event.schedule == '0 3 * * 0'
 
     steps:
       - name: Setup SSH
@@ -80,7 +80,8 @@ jobs:
           EOF
 
       - name: Notify backup completion
-        if: always() && secrets.SLACK_WEBHOOK_URL != ''
+        if: always()
+        continue-on-error: true
         uses: 8398a7/action-slack@v3
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
