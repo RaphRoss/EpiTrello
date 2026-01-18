@@ -101,6 +101,7 @@ docker compose up --build
 ## 📖 Documentation
 
 - **[📚 Documentation complète des fonctionnalités](docs/FEATURES.md)** - Guide détaillé de toutes les fonctionnalités
+- **[🚀 CI/CD Documentation](docs/CICD.md)** - Pipeline d'intégration et déploiement continus
 
 ## 📄 Licence
 
