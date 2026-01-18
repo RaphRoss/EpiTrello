@@ -524,4 +524,7 @@ GitHub → Actions → Workflow → Cancel workflow run
 
 ---
 
+### Test
+- Push test 1
+
 *Pour toute question : voir [README.md](../README.md) principal*
