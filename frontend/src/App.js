@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Board from './components/Board';
-import Modal from './components/Modal';
 import CardDetailModal from './components/CardDetailModal';
 import CreateBoardModal from './components/CreateBoardModal';
 import Notifications from './components/Notifications';

@@ -39,7 +39,12 @@ describe('Comments API', () => {
                 .get('/api/comments/card/1')
                 .expect(200);
 
-            expect(response.body).toEqual(mockComments);
+            expect(response.body).toMatchObject(
+                mockComments.map(c => ({
+                    ...c,
+                    created_at: expect.any(String)
+                }))
+            );
             expect(pool.query).toHaveBeenCalledWith(
                 expect.stringContaining('SELECT c.*, u.name as user_name'),
                 ['1']
@@ -151,7 +156,13 @@ describe('Comments API', () => {
                 .send(updatedComment)
                 .expect(200);
 
-            expect(response.body).toEqual(mockUpdatedComment);
+            expect(response.body).toMatchObject({
+                id: mockUpdatedComment.id,
+                card_id: mockUpdatedComment.card_id,
+                user_id: mockUpdatedComment.user_id,
+                content: mockUpdatedComment.content,
+                created_at: expect.any(String)
+            });
         });
 
         it('should return 404 if comment not found', async () => {

@@ -11,6 +11,7 @@ const CardComments = ({ cardId, userId }) => {
   useEffect(() => {
     fetchComments();
     fetchActivity();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardId]);
 
   const fetchComments = async () => {
