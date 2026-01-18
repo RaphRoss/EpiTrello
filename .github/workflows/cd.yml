@@ -1,7 +1,6 @@
-name: CD - Deploy to Production
+name: CD - Deploy (Manual Only)
 
 on:
-  # Déploiement manuel uniquement - configure les secrets avant d'utiliser
   workflow_dispatch:
     inputs:
       environment:
@@ -12,119 +11,18 @@ on:
         options:
           - production
           - staging
-  # Décommenter après configuration des secrets:
-  # push:
-  #   branches: [ main ]
-  # tags:
-  #   - 'v*'
 
 jobs:
   deploy:
-    name: Deploy to Production
+    name: Manual Deploy
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Add server to known hosts
+      - name: Deploy info
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Deploy with Docker Compose
-        env:
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-        run: |
-          ssh $SERVER_USER@$SERVER_HOST << 'EOF'
-            cd $DEPLOY_PATH
-            git pull origin main
-            docker compose pull
-            docker compose down
-            docker compose up -d --build
-            docker compose logs --tail=50
-          EOF
-
-      - name: Health check
-        run: |
-          sleep 10
-          curl -f ${{ secrets.APP_URL }}/health || exit 1
-
-      - name: Notify deployment
-        if: always()
-        continue-on-error: true
-        uses: 8398a7/action-slack@v3
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        with:
-          status: ${{ job.status }}
-          text: 'Deployment to production: ${{ job.status }}'
-
-  deploy-docker-swarm:
-    name: Deploy to Docker Swarm
-    runs-on: ubuntu-latest
-    if: false  # Désactivé par défaut - activer après configuration de SWARM_SSH_KEY
-    needs: deploy
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.SWARM_SSH_KEY }}
-
-      - name: Deploy stack to Swarm
-        env:
-          SWARM_MANAGER: ${{ secrets.SWARM_MANAGER }}
-        run: |
-          ssh $SWARM_MANAGER << 'EOF'
-            docker stack deploy -c docker-compose.yml epitrello
-            docker service ls
-            docker service logs epitrello_backend --tail=20
-            docker service logs epitrello_frontend --tail=20
-          EOF
-
-  rollback:
-    name: Rollback if needed
-    runs-on: ubuntu-latest
-    if: failure()
-    needs: deploy
-
-    steps:
-      - name: Rollback deployment
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Execute rollback
-        env:
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-        run: |
-          ssh $SERVER_USER@$SERVER_HOST << 'EOF'
-            cd $DEPLOY_PATH
-            git reset --hard HEAD~1
-            docker compose down
-            docker compose up -d
-          EOF
-
-      - name: Notify rollback
-        if: always()
-        continue-on-error: true
-        uses: 8398a7/action-slack@v3
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        with:
-          status: 'warning'
-          text: 'Deployment failed - Rollback executed'
+          echo "Manual deployment triggered"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Configure your deployment secrets and SSH keys to enable actual deployment"
